@@ -12,6 +12,12 @@ SCENARIO_TO_PROTOCOL = {
     "A single-node application": "NONE",
     "HashiCorp Consul KV store": "RAFT",
     "PostgreSQL primary with read replicas": "NONE",
+    "Blockchain replication across competing miners": "BFS",
+    "Kubernetes control plane state store": "RAFT",
+    "Google Chubby lock service": "PAXOS",
+    "Cassandra-like ring membership of 1000 nodes via gossip": "GOSSIP",
+    "CockroachDB ranges": "RAFT",
+    "Single-node Redis instance": "NONE",
 }
 
 out = []
