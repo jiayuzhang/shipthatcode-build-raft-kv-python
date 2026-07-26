@@ -20,11 +20,35 @@ SCENARIO_TO_PROTOCOL = {
     "Single-node Redis instance": "NONE",
 }
 
-out = []
+state = "follower"
+term = 0
+voted_for = "none"
+node = None
+
 for raw in sys.stdin:
     line = raw.strip()
     if not line:
         continue
-    out.append(SCENARIO_TO_PROTOCOL[line])
 
-print("\n".join(out))
+    parts = line.split()
+    cmd = parts[0]
+    if cmd == "INIT":
+        state = "follower"
+        term = 0
+        voted_for = "none"
+        node = parts[1]
+    elif cmd == "STATUS":
+        print(f"state={state} term={term} voted_for={voted_for}")
+    elif cmd == "BECOME_CANDIDATE":
+        state = "candidate"
+        term += 1
+        voted_for = node
+    elif cmd == "BECOME_LEADER":
+        state = "leader"
+        voted_for = node
+    elif cmd == "BECOME_FOLLOWER":
+        request_term = int(parts[1])
+        if term < request_term:
+            term = request_term
+            state = "follower"
+            voted_for = "none"
