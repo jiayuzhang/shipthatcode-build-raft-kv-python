@@ -44,8 +44,9 @@ for raw in sys.stdin:
         term += 1
         voted_for = node
     elif cmd == "BECOME_LEADER":
-        state = "leader"
-        voted_for = node
+        if state == "candidate":
+            state = "leader"
+            voted_for = node
     elif cmd == "BECOME_FOLLOWER":
         request_term = int(parts[1])
         if term < request_term:
